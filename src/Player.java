@@ -14,15 +14,27 @@ public class Player {
         hp = 100;
         gold = 0;
         hasHpPot = true;
-        s = new Sword();
+        s = new Sword("basic sword");
         isDead = false;
 
+    }
+    public int getHp(){
+        return hp;
+    }
+    public void setHp(int hp){
+        this.hp = hp;
+    }
+    public int getMaxHp(){
+        return maxHp;
     }
     public void setGold(int g){
         gold = g;
     }
     public int getGold(){
         return gold;
+    }
+    public int percentHp(){
+        return Math.round(hp / maxHp);
     }
     public void obtainHpPot(){
         hasHpPot = true;
@@ -85,6 +97,7 @@ public class Player {
         stats += "\nHp: " + hp + " / " + maxHp;
         stats += "\nGold: " + gold;
         stats += "\nHas hp potion: " + hasHpPot;
+        stats += "\nSword name: " + s.getName();
         stats += "\nSword damage: " + s.getAtkDmg();
         stats += "\nDodge chance: " + s.getDodgeChance() * 100 + "%";
         stats += "\nInventory: " + getInventory();

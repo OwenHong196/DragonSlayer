@@ -1,9 +1,14 @@
 public class Sword {
+    private String name;
     private int atkDmg;
     private double dodgeChance;
-    public Sword(){
+    public Sword(String name){
+        this.name = name;
         atkDmg = 10;
         dodgeChance = 0.2;
+    }
+    public String getName(){
+        return name;
     }
     public int getAtkDmg(){
         return atkDmg;
@@ -15,4 +20,11 @@ public class Sword {
         atkDmg += dmg;
         dodgeChance += dodge;
     }
+    public void upgrade(int dmg){
+        atkDmg += dmg;
+    }
+    public void upgrade(double dodge){
+        dodgeChance += dodge;
+    }
+
 }

@@ -1,6 +1,7 @@
 public class Dragon {
     private int level;
     private int hp;
+    private int possibleGoldGain;
     private boolean isDead;
     public Dragon(){
         level = (int) (Math.random() * 3 + 1);
@@ -11,6 +12,13 @@ public class Dragon {
             hp = 150;
         }else{
             hp = 200;
+        }
+        if (this.level == 1){
+            possibleGoldGain = 10;
+        } else if (this.level == 1) {
+            possibleGoldGain = 20;
+        }else{
+            possibleGoldGain = 40;
         }
     }
     public void attack(Player p){
@@ -32,8 +40,25 @@ public class Dragon {
         }
     }
     public void getReward(Player p){
+        boolean obtainReward = false;
         if (Math.random() <= 0.5){
-            p.set
+            int gain = (int) (Math.random() * possibleGoldGain + 5);
+            p.setGold(p.getGold() + gain);
+            System.out.println("You gained " + gain + " gold!");
+            obtainReward = true;
+        }
+        if (Math.random() <= 0.1){
+            System.out.println("You received an upgrade!");
+            obtainReward = true;
+        }
+        if (Math.random() <= 0.5){
+            int hpGain = ((1 - (int) (p.percentHp() / 100.0)) / 5) * p.getMaxHp();
+            p.setHp(p.getHp() + hpGain);
+            System.out.println("You healed " + hpGain + " hp");
+            obtainReward = true;
+        }
+        if (!obtainReward){
+            System.out.println("You found nothing :(");
         }
     }
 }
