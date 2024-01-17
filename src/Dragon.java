@@ -58,7 +58,9 @@ public class Dragon {
             obtainReward = true;
         }
         if (!obtainReward){
-            System.out.println("You found nothing :(");
+            String str = "You found nothing ";
+            str += new String(Character.toChars(0x1F622));
+            System.out.println(str);
         }
     }
 }
