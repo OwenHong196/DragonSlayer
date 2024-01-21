@@ -3,7 +3,11 @@ public class Dragon {
     private int hp;
     private int possibleGoldGain;
     private boolean isDead;
-    public Dragon(){
+    private int dragNum;
+    private Player p;
+    public Dragon(int i,Player p){
+        this.p = p;
+        dragNum = i;
         level = (int) (Math.random() * 3 + 1);
         isDead = false;
         if (level == 1){
@@ -15,13 +19,19 @@ public class Dragon {
         }
         if (this.level == 1){
             possibleGoldGain = 10;
-        } else if (this.level == 1) {
+        } else if (this.level == 2) {
             possibleGoldGain = 20;
         }else{
             possibleGoldGain = 40;
         }
     }
-    public void attack(Player p){
+    public int getHp(){
+        return hp;
+    }
+    public int getDragNum(){
+        return dragNum;
+    }
+    public void attack(){
         int dmg = 0;
         if (level == 1){
             dmg = (int) (Math.random() * 10 + 5);
@@ -30,16 +40,19 @@ public class Dragon {
         }else{
             dmg = (int) (Math.random() * 20 + 25);
         }
+        System.out.println("Dragon " + dragNum + " did " + dmg + " damage to you. You have " + p.getHp() + " health remaining.");
         p.receiveDmg(dmg);
+        Room.nextTurn();
     }
     public void receiveDmg(int d){
         hp -= d;
         if (hp < 0){
             isDead = true;
             hp = 0;
+            getReward();
         }
     }
-    public void getReward(Player p){
+    public void getReward(){
         boolean obtainReward = false;
         if (Math.random() <= 0.5){
             int gain = (int) (Math.random() * possibleGoldGain + 5);
@@ -48,6 +61,15 @@ public class Dragon {
             obtainReward = true;
         }
         if (Math.random() <= 0.1){
+            double dodge = 0;
+            int dmg = (int) (Math.random() * 10 + 10);
+            if (Math.random() <= 0.25){
+                dodge = Math.random() - 0.7;
+                if (dodge < 0){
+                    dodge = 0;
+                }
+            }
+            p.getSword().upgrade(dmg,dodge);
             System.out.println("You received an upgrade!");
             obtainReward = true;
         }

@@ -11,7 +11,7 @@ public class Sword {
         return name;
     }
     public int getAtkDmg(){
-        return atkDmg;
+        return (int) (Math.random() * 10) + atkDmg;
     }
     public double getDodgeChance(){
         return dodgeChance;
@@ -20,11 +20,4 @@ public class Sword {
         atkDmg += dmg;
         dodgeChance += dodge;
     }
-    public void upgrade(int dmg){
-        atkDmg += dmg;
-    }
-    public void upgrade(double dodge){
-        dodgeChance += dodge;
-    }
-
 }

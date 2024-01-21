@@ -18,6 +18,15 @@ public class Player {
         isDead = false;
 
     }
+    public boolean getIsDead(){
+        return isDead;
+    }
+    public String getName(){
+        return name;
+    }
+    public Sword getSword(){
+        return s;
+    }
     public int getHp(){
         return hp;
     }
@@ -33,6 +42,9 @@ public class Player {
     public int getGold(){
         return gold;
     }
+    public boolean getHasHpPot(){
+        return hasHpPot;
+    }
     public int percentHp(){
         return Math.round(hp / maxHp);
     }
@@ -47,8 +59,11 @@ public class Player {
         str = str.substring(0, str.length() - 2);
         return str;
     }
-    public int attack(){
-        return s.getAtkDmg();
+    public void attack(Dragon d){
+        int dmg = s.getAtkDmg();
+        d.receiveDmg(dmg);
+        System.out.println("You dealt " + dmg + " damage to dragon " + d.getDragNum());
+        System.out.println("Dragon " + d.getDragNum() + " has " + d.getHp() + " health left");
     }
     public void receiveDmg(int d){
         if (Math.random() < s.getDodgeChance()){
@@ -59,6 +74,9 @@ public class Player {
                 isDead = true;
             }
         }
+    }
+    public void useHpPot(Room room){
+        hp += (maxHp - hp) / 2;
     }
     public void useHpPot(){
         if (hasHpPot){
