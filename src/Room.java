@@ -19,6 +19,8 @@ public class Room {
             dragons = new Dragon[2];
             for (int i = 0; i < dragons.length; i ++){
                 dragons[i] = new Dragon(i+1,p);
+                dragons[i].setLevel(1);
+                dragons[i].updateDragon();
             }
         }else{
             dragons = new Dragon[numDrags];
@@ -26,22 +28,25 @@ public class Room {
                 dragons[i] = new Dragon(i+1,p);
             }
         }
-        if (Math.random() <=0.25){
+        if (Math.random() <=0.45){
             hpPot = true;
         }else{
             hpPot = false;
         }
         allDead = false;
     }
-    public static void nextTurn(){
-        turn ++;
-    }
+    //getters
     public boolean getAllDead(){
         return allDead;
     }
     public Dragon[] getDragons(){
         return dragons;
     }
+    public static void nextTurn(){
+        turn ++;
+    }
+
+    //returns room info
     public String roomInfo(){
         if (roomNum == 1){
             name = "Entrance";
@@ -59,16 +64,23 @@ public class Room {
         }else if (roomNum == 5){
             name = "¿The End?";
             description = "A dark room with ominous eyes staring at you";
+        }else{
+            name = "The treasury";
+            description = "You were the first to solo this dungeon, marking your name in history.";
+            description += "\nCongratulations, " + p.getName();
         }
-        String info = "Room " + roomNum + " : " + name;
-        info += "\n" + description;
-        info += "\nYou encountered " + dragons.length + " dragons!";
+        String info = Colors.CYAN + "Room " + roomNum + " : " + name + Colors.RESET;
+        info += Colors.GREEN + "\n" + description + Colors.RESET;
+        if (roomNum < 6) {
+            info += Colors.RED + "\nYou encountered " + dragons.length + " dragons!" + Colors.RESET;
+        }
         return info;
     }
+    //allows the player to search for health potion
     public void search(){
         if (!searched){
             if (hpPot){
-                System.out.println("You found a hp potion!");
+                System.out.println("You found a health potion!");
                 System.out.print("Do you want to (U)se or (S)ave it? ");
                 String option = scan.nextLine().toLowerCase();
                 while (!option.equals("u") && !option.equals("s")){
@@ -76,11 +88,11 @@ public class Room {
                     option = scan.nextLine().toLowerCase();
                 }
                 if (option.equals("u")){
-                    System.out.println("You used the hp potion.");
+                    System.out.println("You used the health potion.");
                     p.useHpPot(this);
                 }else{
                     if (p.getHasHpPot()){
-                        System.out.println("You already have a hp potion so you used it instead.");
+                        System.out.println("You already have a health potion so you used it instead.");
                         p.useHpPot(this);
                     }else{
                         p.obtainHpPot();
@@ -89,23 +101,28 @@ public class Room {
             }else{
                 System.out.println("You found nothing.");
             }
+            searched = true;
         }else{
             System.out.println("You already searched this room!");
         }
     }
+
+    //returns the dragons left in room
     public String dragonsLeft(){
         String list = "Dragons remaining:";
         for (int i = 1; i <= dragons.length; i ++){
-            if (dragons[i-1] != null){
-                list += "\nDragon " + i;
+            if (!dragons[i-1].getIsDead()){
+                list += "\nDragon " + i + " (Level " + dragons[i-1].getLevel() + ")";
             }
         }
         return list;
     }
+
+    //checks if all dragons are slain
     public void checkAllDead(){
         boolean check = true;
         for (Dragon d : dragons){
-            if (d != null){
+            if (!d.getIsDead()){
                 check = false;
             }
         }
@@ -113,15 +130,25 @@ public class Room {
             allDead = true;
         }
     }
+
+    //determines which dragon to attack
     public void dragonAttack(){
         int idx = 0;
-        while (idx < dragons.length && dragons[idx] == null){
+        while (idx < dragons.length && dragons[idx].getIsDead()){
             idx ++;
         }
-        if (dragons[idx] != null) {
+        if (idx < dragons.length && !dragons[idx].getIsDead()) {
             dragons[idx].attack();
         }else{
             System.out.println("All dragons are defeated.");
+        }
+    }
+
+    //prints all dragon stats in room
+    public void dragonStats(){
+        for (Dragon d : dragons){
+            System.out.println(d.stats());
+            System.out.println();
         }
     }
 }
